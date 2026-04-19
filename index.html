@@ -133,7 +133,7 @@
   e.preventDefault();
   if (confirm("Proceed with submitting your review?")) {
 
-     clearForm();
+     //clearForm();
     
     const reviewText = document.getElementById('review').value;
     let reviewerName = document.getElementById('name').value.trim();
@@ -170,7 +170,7 @@
     const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
     addReviewToList(newReview, emoji);
 
-    clearForm();
+    //clearForm();
   }
 });
 
