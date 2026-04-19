@@ -103,9 +103,9 @@
 
     /* ✅ LEGEND STYLE */
     .legend {
-      margin-top: 20px;
+      margin-bottom: 20px;
       padding: 15px;
-      background: #1a1a1a;
+      background: #222;
       border: 1px solid #444;
     }
 
@@ -128,23 +128,13 @@
       <img src="poster.jpg" alt="The Ember Knight Poster" class="poster">
 
       <div class="summary">
-       <p>In a kingdom where fire is forbidden, warrior Kael Draven discovers his gift to summon flame. Branded a heretic, he flees into exile, guided by a reclusive mage who reveals Kael’s power is the only force strong enough to challenge the Frost King.</p>
-        <p>Kael finds love in Lyra, a healer who teaches him that fire can heal as well as destroy. But when Kael’s closest ally betrays him to the Frost King, Lyra is captured, forcing Kael to choose between vengeance and rescue. His rage threatens to consume him, even as the Frost King’s armies march closer.</p>
-        <p>In the final battle, Kael defeats the Frost King, but Lyra’s fate remains uncertain — she vanishes in the chaos, leaving Kael torn between triumph and despair. The kingdom cheers his victory, yet Kael walks away, haunted by betrayal and loss, his destiny unresolved.</p>
+        <p>In a kingdom where fire is forbidden...</p>
+        <p>Kael finds love in Lyra...</p>
+        <p>Final battle reshapes destiny...</p>
       </div>
 
       <div class="disclaimer">
-       Disclaimer: This movie poster and summary are AI‑generated and used for educational purposes only. The content is fictional and not associated with any real film production.
-      </div>
-
-      <!-- ✅ SENTIMENT LEGEND -->
-      <div class="legend">
-        <h3>Emoji Sentiment Legend</h3>
-        <p>😊 Positive — Loved it, highly enjoyable</p>
-        <p>😐 Neutral — Mixed or average feedback</p>
-        <p>😡 Negative — Disliked or critical review</p>
-        <p>⚠️ MaxLimit — OpenAI quota or usage limit reached</p>
-        <p>❌ Error / Unknown — System error or invalid response</p>
+        Disclaimer: AI-generated content for educational purposes only.
       </div>
 
       <form id="reviewForm">
@@ -159,6 +149,17 @@
     </div>
 
     <div class="right">
+
+      <!-- ✅ LEGEND MOVED HERE -->
+      <div class="legend">
+        <h3>Emoji Sentiment Legend</h3>
+        <p>😊 Positive — Loved it</p>
+        <p>😐 Neutral — Average feedback</p>
+        <p>😡 Negative — Disliked</p>
+        <p>⚠️ MaxLimit — API quota reached</p>
+        <p>❌ Error / Unknown — System error</p>
+      </div>
+
       <h2>Audience Reviews</h2>
       <div id="reviews">Loading reviews...</div>
     </div>
@@ -171,9 +172,6 @@
   const neutralMessage = "We appreciate your balanced feedback.";
   const negativeMessage = "Sorry the story didn’t resonate — your input helps us improve.";
 
-  // =========================
-  // UI LOCK / UNLOCK
-  // =========================
   function setUI(enabled) {
     document.querySelectorAll("button").forEach(b => b.disabled = !enabled);
   }
@@ -193,7 +191,6 @@
       popup.style.padding = "20px";
       popup.style.border = "2px solid #f44336";
       popup.style.zIndex = "9999";
-      popup.style.borderRadius = "8px";
       document.body.appendChild(popup);
     }
 
@@ -216,9 +213,6 @@
     document.getElementById('sentimentResult').innerText = '';
   }
 
-  // =========================
-  // POST REVIEW
-  // =========================
   document.getElementById('reviewForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -244,19 +238,12 @@
 
       const sentiment = data.sentiment;
       let message = "";
-      let emoji = "";
 
-      if (sentiment === "positive") {
-        message = positiveMessage; emoji = "😊";
-      } else if (sentiment === "neutral") {
-        message = neutralMessage; emoji = "😐";
-      } else if (sentiment === "negative") {
-        message = negativeMessage; emoji = "😡";
-      } else if (sentiment === "MaxLimit") {
-        message = "Daily limit reached."; emoji = "⚠️";
-      } else {
-        message = "Unexpected error."; emoji = "❌";
-      }
+      if (sentiment === "positive") message = positiveMessage;
+      else if (sentiment === "neutral") message = neutralMessage;
+      else if (sentiment === "negative") message = negativeMessage;
+      else if (sentiment === "MaxLimit") message = "API limit reached.";
+      else message = "Error processing request.";
 
       document.getElementById('sentimentResult').innerText = message;
 
@@ -266,14 +253,9 @@
       console.error(err);
       document.getElementById('sentimentResult').innerText = "Error submitting review.";
     })
-    .finally(() => {
-      unlockUI();
-    });
+    .finally(() => unlockUI());
   });
 
-  // =========================
-  // GET REVIEWS
-  // =========================
   window.addEventListener("DOMContentLoaded", loadReviews);
 
   function loadReviews() {
