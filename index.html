@@ -164,6 +164,8 @@
     document.getElementById('sentimentResult').innerText = message;
     const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
     addReviewToList(newReview, emoji);
+
+    clearForm();
   }
 });
 
