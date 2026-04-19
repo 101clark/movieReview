@@ -133,6 +133,7 @@
         let reviewerName = document.getElementById('name').value.trim();
         if (!reviewerName) reviewerName = "Anonymous";
 
+        <!--
         // Call AWS Lambda (replace with your endpoint)
         fetch("YOUR_AWS_LAMBDA_ENDPOINT", {
           method: "POST",
@@ -147,6 +148,9 @@
           if (sentiment === "positive") { message = positiveMessage; emoji = "😊"; }
           else if (sentiment === "neutral") { message = neutralMessage; emoji = "😐"; }
           else if (sentiment === "negative") { message = negativeMessage; emoji = "😡"; }
+          -->
+
+          
 
           document.getElementById('sentimentResult').innerText = message;
 
