@@ -125,6 +125,8 @@
   function clearForm() {
     document.getElementById('review').value = '';
     document.getElementById('name').value = '';
+    document.getElementById('sentimentResult').innerText = '';
+    console.log("Form cleared!");
   }
 
   document.getElementById('reviewForm').addEventListener('submit', function(e) {
