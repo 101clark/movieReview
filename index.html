@@ -128,44 +128,45 @@
   }
 
   document.getElementById('reviewForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (confirm("Proceed with submitting your review?")) {
-      const reviewText = document.getElementById('review').value;
-      let reviewerName = document.getElementById('name').value.trim();
-      if (!reviewerName) reviewerName = "Anonymous";
+  e.preventDefault();
+  if (confirm("Proceed with submitting your review?")) {
+    const reviewText = document.getElementById('review').value;
+    let reviewerName = document.getElementById('name').value.trim();
+    if (!reviewerName) reviewerName = "Anonymous";
 
-      /*
-      // Call AWS Lambda (replace with your endpoint)
-      fetch("YOUR_AWS_LAMBDA_ENDPOINT", {
-        method: "POST",
-        body: JSON.stringify({ review: reviewText }),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.json())
-      .then(data => {
-        const sentiment = data.sentiment; // expected: "positive", "neutral", "negative"
-        let message = "";
-        let emoji = "";
-        if (sentiment === "positive") { message = positiveMessage; emoji = "😊"; }
-        else if (sentiment === "neutral") { message = neutralMessage; emoji = "😐"; }
-        else if (sentiment === "negative") { message = negativeMessage; emoji = "😡"; }
-
-        document.getElementById('sentimentResult').innerText = message;
-        const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
-        addReviewToList(newReview, emoji);
-      });
-      */
-
-      // Default to positive sentiment while AWS call is disabled
-      const sentiment = "positive";
-      const message = positiveMessage;
-      const emoji = "😊";
+    /*
+    // Call AWS Lambda (replace with your endpoint)
+    fetch("YOUR_AWS_LAMBDA_ENDPOINT", {
+      method: "POST",
+      body: JSON.stringify({ review: reviewText }),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const sentiment = data.sentiment; // expected: "positive", "neutral", "negative"
+      let message = "";
+      let emoji = "";
+      if (sentiment === "positive") { message = positiveMessage; emoji = "😊"; }
+      else if (sentiment === "neutral") { message = neutralMessage; emoji = "😐"; }
+      else if (sentiment === "negative") { message = negativeMessage; emoji = "😡"; }
 
       document.getElementById('sentimentResult').innerText = message;
       const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
       addReviewToList(newReview, emoji);
-    }
-  });
+    });
+    */
+
+    // Default to positive sentiment while AWS call is disabled
+    const sentiment = "positive";
+    const message = positiveMessage;
+    const emoji = "😊";
+
+    document.getElementById('sentimentResult').innerText = message;
+    const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
+    addReviewToList(newReview, emoji);
+  }
+});
+
 
   function addReviewToList(review, emoji) {
     const reviewsDiv = document.getElementById('reviews');
