@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Ember Knight</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #222;
+      padding: 20px;
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+      color: #f44336;
+    }
+    main {
+      display: flex;
+      padding: 20px;
+    }
+    .left {
+      flex: 70%;
+      padding-right: 20px;
+    }
+    .right {
+      flex: 30%;
+      background-color: #1a1a1a;
+      padding: 20px;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+    img.poster {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      border: 2px solid #444;
+    }
+    .summary {
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 0.8em;
+      color: #aaa;
+      font-style: italic;
+    }
+    form {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    textarea, input {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #222;
+      color: #eee;
+      border: 1px solid #444;
+    }
+    button {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f44336;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #d32f2f;
+    }
+    .review {
+      border-bottom: 1px solid #444;
+      padding: 10px 0;
+    }
+    .emoji {
+      font-size: 1.2em;
+      margin-left: 5px;
+    }
+    .sentiment-message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>The Ember Knight</header>
+  <main>
+    <div class="left">
+      <img src="poster.png" alt="The Ember Knight Poster" class="poster">
+      <div class="summary">
+        <p>In a kingdom where fire is forbidden, warrior Kael Draven discovers his gift to summon flame. Branded a heretic, he flees into exile, guided by a reclusive mage who reveals Kael’s power is the only force strong enough to challenge the Frost King.</p>
+        <p>Kael finds love in Lyra, a healer who teaches him that fire can heal as well as destroy. But when Kael’s closest ally betrays him to the Frost King, Lyra is captured, forcing Kael to choose between vengeance and rescue. His rage threatens to consume him, even as the Frost King’s armies march closer.</p>
+        <p>In the final battle, Kael defeats the Frost King, but Lyra’s fate remains uncertain — she vanishes in the chaos, leaving Kael torn between triumph and despair. The kingdom cheers his victory, yet Kael walks away, haunted by betrayal and loss, his destiny unresolved.</p>
+      </div>
+      <div class="disclaimer">
+        Disclaimer: This movie poster and summary are AI‑generated and used for educational purposes only. The content is fictional and not associated with any real film production.
+      </div>
+      <form id="reviewForm">
+        <label for="review">Leave a Movie Review:</label>
+        <textarea id="review" rows="4" required></textarea>
+        <input type="text" id="name" placeholder="Your name (optional)">
+        <button type="button" onclick="clearForm()">Clear</button>
+        <button type="submit">Submit</button>
+      </form>
+      <div id="sentimentResult" class="sentiment-message"></div>
+    </div>
+    <div class="right">
+      <h2>Audience Reviews</h2>
+      <div id="reviews"></div>
+    </div>
+  </main>
+
+  <script>
+    // Sentiment messages
+    const positiveMessage = "Thanks for your uplifting review!";
+    const neutralMessage = "We appreciate your balanced feedback.";
+    const negativeMessage = "Sorry the story didn’t resonate — your input helps us improve.";
+
+    function clearForm() {
+      document.getElementById('review').value = '';
+      document.getElementById('name').value = '';
+    }
+
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (confirm("Proceed with submitting your review?")) {
+        const reviewText = document.getElementById('review').value;
+        let reviewerName = document.getElementById('name').value.trim();
+        if (!reviewerName) reviewerName = "Anonymous";
+
+        // Call AWS Lambda (replace with your endpoint)
+        fetch("YOUR_AWS_LAMBDA_ENDPOINT", {
+          method: "POST",
+          body: JSON.stringify({ review: reviewText }),
+          headers: { "Content-Type": "application/json" }
+        })
+        .then(res => res.json())
+        .then(data => {
+          const sentiment = data.sentiment; // expected: "positive", "neutral", "negative"
+          let message = "";
+          let emoji = "";
+          if (sentiment === "positive") { message = positiveMessage; emoji = "😊"; }
+          else if (sentiment === "neutral") { message = neutralMessage; emoji = "😐"; }
+          else if (sentiment === "negative") { message = negativeMessage; emoji = "😡"; }
+
+          document.getElementById('sentimentResult').innerText = message;
+
+          // Save to movie_reviews.json (simulated here — in real app, backend writes file)
+          const newReview = { name: reviewerName, text: reviewText, sentiment: sentiment };
+          addReviewToList(newReview, emoji);
+        });
+      }
+    });
+
+    function addReviewToList(review, emoji) {
+      const reviewsDiv = document.getElementById('reviews');
+      const div = document.createElement('div');
+      div.className = "review";
+      div.innerHTML = `<strong>${review.name}</strong>: ${review.text} <span class="emoji">${emoji}</span>`;
+      reviewsDiv.appendChild(div);
+    }
+
+    // Load existing reviews from movie_reviews.json
+    fetch("movie_reviews.json")
+      .then(res => res.json())
+      .then(data => {
+        data.forEach(r => {
+          let emoji = "";
+          if (r.sentiment === "positive") emoji = "😊";
+          else if (r.sentiment === "neutral") emoji = "😐";
+          else if (r.sentiment === "negative") emoji = "😡";
+          addReviewToList(r, emoji);
+        });
+      });
+  </script>
+</body>
+</html>
