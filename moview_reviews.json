@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Anonymous",
+    "text": "The Ember Knight was thrilling, I loved the fire vs ice theme!",
+    "sentiment": "positive"
+  },
+  {
+    "name": "LyraFan",
+    "text": "The betrayal twist was interesting, but the ending felt unresolved.",
+    "sentiment": "neutral"
+  },
+  {
+    "name": "KaelWatcher",
+    "text": "I didn’t enjoy the pacing, too much drama without payoff.",
+    "sentiment": "negative"
+  }
+]
