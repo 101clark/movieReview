@@ -132,6 +132,9 @@
   document.getElementById('reviewForm').addEventListener('submit', function(e) {
   e.preventDefault();
   if (confirm("Proceed with submitting your review?")) {
+
+     clearForm();
+    
     const reviewText = document.getElementById('review').value;
     let reviewerName = document.getElementById('name').value.trim();
     if (!reviewerName) reviewerName = "Anonymous";
